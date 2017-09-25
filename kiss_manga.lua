@@ -1,5 +1,4 @@
 pageNo = 1
-mangaListType = 'All'
 
 function getMangaListTypes()
     titleList = { }
@@ -18,26 +17,7 @@ function getMangaListTypes()
     return titleList
 end
 
-function setMangaListType(type)
-    mangaListType = type
-end
-
-function getMangaListPage1()
-    pageNo = 1
-    return getMangaListPage()
-end
-
-function getMangaListPreviousPage()
-   if pageNo > 1 then pageNo = pageNo -1 end
-   return getMangaListPage()
-end
-
-function getMangaListNextPage()
-   pageNo = pageNo + 1
-   return getMangaListPage()
-end
-
-function getMangaListPage()
+function getMangaListPage(mangaListType)
     print('type is ' .. mangaListType)
     if mangaListType == 'All' then
         return getMangaList('http://kissmanga.com/MangaList?page=' .. pageNo)
