@@ -1,5 +1,3 @@
-print 'Hello from Lua!!!! Own file Woop Woop'
-
 pageNo = 1
 mangaListType = 'All'
 
