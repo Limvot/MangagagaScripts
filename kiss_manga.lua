@@ -226,6 +226,7 @@ function handleRequest(req)
     -- We have a page request
     print("Requesting page")
     print(r_page)
+    s_chapter['url'] = s_chapter_list[r_chapter]
     page_url = getMangaChapterPage(s_manga, s_chapter, tonumber(r_page))
     print("page url is...")
     print(page_url)
