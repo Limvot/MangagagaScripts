@@ -13,7 +13,7 @@ function handleRequest(req) {
 
     var pageNo = 1
 
-    if        (r_manga == "")   {
+    if (r_manga == "")   {
         api.note("request for manga list")
         var url = 'http://kissmanga.com/MangaList?page=' + pageNo
         if        (r_filter == "All") {
@@ -85,6 +85,8 @@ function handleRequest(req) {
             pageJS += ";" + match[1]
         }
         pageJS += ';var message = "no message"; function alert(a) { message = a };'
+        // eval the stuff once
+        eval(pageJS)
 
         var regex = /lstImages\.push\((.*?)\);/g
         var match
@@ -93,8 +95,8 @@ function handleRequest(req) {
         manga[r_manga]['chapters'][r_chapter]['pages'] = []
         while (match = regex.exec(pageSource)) {
             var pageURL = match[1]
-            api.note("evaling pageJS and " + pageURL)
-            var url = eval(pageJS + pageURL)
+            api.note("evaling " + pageURL)
+            var url = eval(pageURL)
             manga[r_manga]['chapters'][r_chapter]['pages'].push(url)
         }
         api.note("Pages found")
