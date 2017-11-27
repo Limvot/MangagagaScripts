@@ -43,11 +43,15 @@ function handleRequest(req) {
         return [ manga[r_manga]['description'] ].concat(Object.keys(manga[r_manga]['chapters']))
     } else if (r_page == "")    {
         api.note("request for num pages")
+        if (!manga[r_manga]['chapters'])
+            finishMangaSetup(r_manga)
         if (!manga[r_manga]['chapters'][r_chapter]['pages'])
             finishChapterSetup(r_manga, r_chapter)
         return [ manga[r_manga]['chapters'][r_chapter]['pages'].length.toString() ]
     } else {
-        api.note("request for page")
+        api.note("request for page in " + r_manga + " : " + r_chapter + " : " + r_page)
+        if (!manga[r_manga]['chapters'])
+            finishMangaSetup(r_manga)
         if (!manga[r_manga]['chapters'][r_chapter]['pages'])
             finishChapterSetup(r_manga, r_chapter)
         return [ downloadCF(manga[r_manga]['chapters'][r_chapter]['pages'][r_page]) ]
