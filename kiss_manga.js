@@ -1,4 +1,5 @@
 
+var directory = {}
 var manga = {}
 
 function handleRequest(req) {
@@ -8,40 +9,23 @@ function handleRequest(req) {
     var r_chapter = req.getChapter()
     var r_page    = req.getPage()
 
-    var pageNo = 1
-
     if (r_filter == "")   {
         return ["All", "Most Popular", "Latest Update", "Newest"]
     } else if (r_manga == "") {
-        api.note("request for manga list")
-        var url = 'http://kissmanga.com/MangaList?page=' + pageNo
-        if        (r_filter == "All") {
-            // default yo
-        } else if (r_filter == "Most Popular") {
-            url = 'http://kissmanga.com/MangaList/MostPopular?page=' + pageNo
-        } else if (r_filter =="Latest Update") {
-            url = 'http://kissmanga.com/MangaList/LatestUpdate?page=' + pageNo
-        } else if (r_filter =="Newest") {
-            url = 'http://kissmanga.com/MangaList/Newest?page=' + pageNo
-        }
-        var path = downloadCF(url)
-        var pageSource = api.readFile(path)
-
-        var regex = /<\/div>'>[\s\S]*?<a href="\/Manga\/([\s\S]*?)">([\s\S]*?)<\/a>/g
-        var match
-        var results = []
-        while (match = regex.exec(pageSource)) {
-            manga[match[2]] = {title: match[2], url: match[1]}
-            results.push(match[2])
-        }
-        return results
+        if (!directory[r_filter])
+            finishDirectorySetup(r_filter)
+        return directory[r_filter]
     } else if (r_chapter == "") {
         api.note("request for chapter list")
+        if (!directory[r_filter])
+            finishDirectorySetup(r_filter)
         if (!manga[r_manga]['chapters'])
             finishMangaSetup(r_manga)
         return [ manga[r_manga]['description'] ].concat(Object.keys(manga[r_manga]['chapters']))
     } else if (r_page == "")    {
         api.note("request for num pages")
+        if (!directory[r_filter])
+            finishDirectorySetup(r_filter)
         if (!manga[r_manga]['chapters'])
             finishMangaSetup(r_manga)
         if (!manga[r_manga]['chapters'][r_chapter]['pages'])
@@ -49,11 +33,38 @@ function handleRequest(req) {
         return [ manga[r_manga]['chapters'][r_chapter]['pages'].length.toString() ]
     } else {
         api.note("request for page in " + r_manga + " : " + r_chapter + " : " + r_page)
+        if (!directory[r_filter])
+            finishDirectorySetup(r_filter)
         if (!manga[r_manga]['chapters'])
             finishMangaSetup(r_manga)
         if (!manga[r_manga]['chapters'][r_chapter]['pages'])
             finishChapterSetup(r_manga, r_chapter)
         return [ downloadCF(manga[r_manga]['chapters'][r_chapter]['pages'][r_page]) ]
+    }
+}
+
+function finishDirectorySetup(r_filter) {
+    api.note("request for manga list")
+    var pageNo = 1
+    var url = 'http://kissmanga.com/MangaList?page=' + pageNo
+    if        (r_filter == "All") {
+        // default yo
+    } else if (r_filter == "Most Popular") {
+        url = 'http://kissmanga.com/MangaList/MostPopular?page=' + pageNo
+    } else if (r_filter =="Latest Update") {
+        url = 'http://kissmanga.com/MangaList/LatestUpdate?page=' + pageNo
+    } else if (r_filter =="Newest") {
+        url = 'http://kissmanga.com/MangaList/Newest?page=' + pageNo
+    }
+    var path = downloadCF(url)
+    var pageSource = api.readFile(path)
+
+    var regex = /<\/div>'>[\s\S]*?<a href="\/Manga\/([\s\S]*?)">([\s\S]*?)<\/a>/g
+    var match
+    directory[r_filter] = []
+    while (match = regex.exec(pageSource)) {
+        manga[match[2]] = {title: match[2], url: match[1]}
+        directory[r_filter].push(match[2])
     }
 }
 
