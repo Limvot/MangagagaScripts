@@ -1,6 +1,3 @@
-function getMangaListTypes() {
-    return ["All", "Most Popular", "Latest Update", "Newest"]
-}
 
 var manga = {}
 
@@ -13,7 +10,9 @@ function handleRequest(req) {
 
     var pageNo = 1
 
-    if (r_manga == "")   {
+    if (r_filter == "")   {
+        return ["All", "Most Popular", "Latest Update", "Newest"]
+    } else if (r_manga == "") {
         api.note("request for manga list")
         var url = 'http://kissmanga.com/MangaList?page=' + pageNo
         if        (r_filter == "All") {
