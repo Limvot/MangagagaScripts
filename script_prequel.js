@@ -26,7 +26,7 @@ function downloadCF(url) {
     if (response_headers.containsKey(null)) {
         if (response_headers.get(null).get(0).includes('503') &&
             response_headers.containsKey('Server') &&
-            response_headers.get('Server').get(0).includes('cloudflare-nginx')) {
+            response_headers.get('Server').get(0).includes('cloudflare')) {
 
             api.note("CLLOUDFLARE DETECTED!")
             var page = api.readFile(file_name)
