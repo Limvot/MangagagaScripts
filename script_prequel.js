@@ -45,12 +45,15 @@ function downloadCF(url) {
 
             var domain = url.match('http://(.*?)/')[1]
             api.note("Trying to eval " + to_eval)
-            var answer = eval(to_eval) + domain.length
+            var evaled = eval(to_eval)
+            api.note('evaled is ' + evaled)
+            var answer = evaled + domain.length
+            api.note('full answer is ' + answer)
             var protocol = url.match('(.*?)://')[1]
             var submit = protocol + '://' + domain + '/cdn-cgi/l/chk_jschl' +
                 '?jschl_vc=' + challenge + '&jschl_answer=' + answer + '&pass=' + challenge_pass
             api.note('waiting...')
-            api.sleep(5000)
+            api.sleep(4000)
             api.note('done')
             return api.downloadWithRequestHeadersAndReferrer(submit,url).getFirst()
         } else {
