@@ -10,7 +10,7 @@ function handleRequest(req) {
     var r_page    = req.getPage()
 
     if (r_filter == "")   {
-        return ["All", "Most Popular", "Latest Update", "Newest"]
+        return ["All", "Most Popular", "Most Popular2", "Latest Update", "Newest"]
     } else if (r_manga == "") {
         if (!directory[r_filter])
             finishDirectorySetup(r_filter)
@@ -51,6 +51,8 @@ function finishDirectorySetup(r_filter) {
         // default yo
     } else if (r_filter == "Most Popular") {
         url = 'http://kissmanga.com/MangaList/MostPopular?page=' + pageNo
+ } else if (r_filter == "Most Popular2") {
+        url = 'http://kissmanga.com/MangaList/MostPopular?page=2'
     } else if (r_filter =="Latest Update") {
         url = 'http://kissmanga.com/MangaList/LatestUpdate?page=' + pageNo
     } else if (r_filter =="Newest") {
