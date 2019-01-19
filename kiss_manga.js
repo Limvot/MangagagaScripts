@@ -46,17 +46,17 @@ function handleRequest(req) {
 function finishDirectorySetup(r_filter) {
     api.note("request for manga list")
     var pageNo = 1
-    var url = 'http://kissmanga.com/MangaList?page=' + pageNo
+    var url = 'https://kissmanga.com/MangaList?page=' + pageNo
     if        (r_filter == "All") {
         // default yo
     } else if (r_filter == "Most Popular") {
-        url = 'http://kissmanga.com/MangaList/MostPopular?page=' + pageNo
+        url = 'https://kissmanga.com/MangaList/MostPopular?page=' + pageNo
  } else if (r_filter == "Most Popular2") {
-        url = 'http://kissmanga.com/MangaList/MostPopular?page=2'
+        url = 'https://kissmanga.com/MangaList/MostPopular?page=2'
     } else if (r_filter =="Latest Update") {
-        url = 'http://kissmanga.com/MangaList/LatestUpdate?page=' + pageNo
+        url = 'https://kissmanga.com/MangaList/LatestUpdate?page=' + pageNo
     } else if (r_filter =="Newest") {
-        url = 'http://kissmanga.com/MangaList/Newest?page=' + pageNo
+        url = 'https://kissmanga.com/MangaList/Newest?page=' + pageNo
     }
     var path = downloadCF(url)
     var pageSource = api.readFile(path)
@@ -72,7 +72,7 @@ function finishDirectorySetup(r_filter) {
 
 function finishMangaSetup(r_manga) {
     api.note("FINISHING MANGA SETUP FOR " + r_manga)
-    var mangaURL = 'http://kissmanga.com/Manga' + '/' + manga[r_manga]['url'] + '?confirm=yes'
+    var mangaURL = 'https://kissmanga.com/Manga' + '/' + manga[r_manga]['url'] + '?confirm=yes'
     var path = downloadCF(mangaURL)
     var pageSource = api.readFile(path)
     var descriptionRegex = /<span class="info">Summary:<\/span>[\s\S]*?<p[\s\S]*?>([\s\S]*?)<\/p>/g
@@ -89,7 +89,7 @@ function finishMangaSetup(r_manga) {
 
 function finishChapterSetup(r_manga, r_chapter) {
     api.note("FINISHING CHAPTER SETUP FOR " + r_manga + ":" + r_chapter)
-    var pagesURL = 'http://kissmanga.com/Manga/' + manga[r_manga]['url'] + '/' + manga[r_manga]['chapters'][r_chapter]['url']
+    var pagesURL = 'https://kissmanga.com/Manga/' + manga[r_manga]['url'] + '/' + manga[r_manga]['chapters'][r_chapter]['url']
 
     api.note('The Pages URL is: ' + pagesURL)
     var path = downloadCF(pagesURL)
@@ -100,9 +100,9 @@ function finishChapterSetup(r_manga, r_chapter) {
     //this won't stop us
     //they encode their links now, so we download all their crypto js
     //and execute it (over and over for every link right now...)
-    path = downloadCF('http://kissmanga.com/Scripts/ca.js')
+    path = downloadCF('https://kissmanga.com/Scripts/ca.js')
     var ca_js = api.readFile(path)
-    path = downloadCF('http://kissmanga.com/Scripts/lo.js')
+    path = downloadCF('https://kissmanga.com/Scripts/lo.js')
     var lo_js = api.readFile(path)
     var pageJS = ca_js + ';' + lo_js
 

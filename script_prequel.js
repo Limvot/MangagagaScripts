@@ -43,7 +43,7 @@ function downloadCF(url) {
             to_eval = to_eval.replace(/\s*?f\.submit.*?;/g, '')
             to_eval = to_eval.replace(/\s*?a\.value = ([\s\S]*?) \+ t.length;([\s\S]*)/g, '$1')
 
-            var domain = url.match('http://(.*?)/')[1]
+            var domain = url.match('(http|https)://(.*?)/')[2]
             api.note("Trying to eval " + to_eval)
             var evaled = eval(to_eval)
             api.note('evaled is ' + evaled)
